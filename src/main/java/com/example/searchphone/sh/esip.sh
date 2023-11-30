@@ -1,6 +1,7 @@
-# !/bin/bash
+#! /bin/bash
 
-mkdir 123
+dir1=sys_dbgprint_
+dir2=sys_desk_
 
 
 

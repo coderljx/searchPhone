@@ -28,13 +28,19 @@ class SearchPhoneApplicationTests {
         System.out.println(( (JSONObject) jsonObject.get("NE2")).get("elb"));
 
 
+        File file = new File("/Users/brother/Desktop/searchPhone/src/main/resources/NetworkElement.txt");
+        System.out.println(file.lastModified());
+
     }
 
 
     public static void main(String[] args) throws Exception{
 //        Process exec = Runtime.getRuntime().exec("sshpass -p  bash /Users/brother/Desktop/searchPhone/src/main/java/com/example/searchphone/sh/esip.sh");
-        Connection connection = new Connection("");
+//        Connection connection = new Connection("");
 
+
+        File file = new File("/Users/brother/Desktop/searchPhone/src/main/resources/NetworkElement.txt");
+        System.out.println(file.lastModified());
 
     }
 
