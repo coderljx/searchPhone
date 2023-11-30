@@ -21,20 +21,21 @@ import java.util.List;
 class SearchPhoneApplicationTests {
 
 
-
     @Test
-    void contextLoads() throws Exception{
+    void contextLoads() throws Exception {
         JSONObject jsonObject = JSONObject.parseObject(NetwokELement.parseData());
-        System.out.println(( (JSONObject) jsonObject.get("NE2")).get("elb"));
+        System.out.println(((JSONObject) jsonObject.get("NE2")).get("elb"));
 
 
     }
 
 
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
 //        Process exec = Runtime.getRuntime().exec("sshpass -p  bash /Users/brother/Desktop/searchPhone/src/main/java/com/example/searchphone/sh/esip.sh");
-        Connection connection = new Connection("");
+//        Connection connection = new Connection("");
 
+
+        System.out.println(NetwokELement.sortFileDir("C:\\Users\\Brother\\Desktop\\aaa", "qwe"));
 
     }
 

@@ -1,8 +1,8 @@
-#!/bin/bash
+#! /bin/bash
 
-mkdir 123
+. ./utils.sh
 
-
+sortFilelist "C:\Users\Brother\Desktop\aaa" 3211
 
 
 
