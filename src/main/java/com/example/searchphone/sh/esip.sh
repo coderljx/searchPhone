@@ -1,9 +1,8 @@
 #! /bin/bash
 
-dir1=sys_dbgprint_
-dir2=sys_desk_
+. ./utils.sh
 
-
+sortFilelist "C:\Users\Brother\Desktop\aaa" 3211
 
 
 
