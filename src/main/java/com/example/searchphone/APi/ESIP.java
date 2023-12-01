@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 public class ESIP {
     private final Logger mylog = LoggerFactory.getLogger(ESIP.class);
 
+    private static final String logSystem = "sys_dbgprint_";
 
     @GetMapping("/getEsip")
     @ResponseBody
