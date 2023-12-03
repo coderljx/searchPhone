@@ -34,8 +34,8 @@ public class Response<T> {
         this.count = count;
     }
 
-    public Response responseOk(T data) {
-        return new Response<T>(200, "ok", data);
+    public Response(T data) {
+        this(200, "ok", data);
     }
 
 

@@ -1,5 +1,9 @@
 package com.example.searchphone.utils;
 
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
+import javafx.scene.control.Tab;
+import jdk.nashorn.internal.runtime.regexp.joni.ast.StringNode;
 import org.apache.tomcat.util.json.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,10 +12,7 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -22,22 +23,52 @@ public class NetwokELement {
     private final Logger mylog = LoggerFactory.getLogger(NetwokELement.class);
 
 
-    //    读取每个网元的配置信息
+    // 读取每个网元的配置信息
     public static String parseData() throws Exception {
-        File fileName = ResourceUtils.getFile("classpath:NetworkElement.txt");
+        File file = ResourceUtils.getFile("classpath:NetworkElement.txt");
+        return readFileToString(file);
+    }
+
+    /**
+     * 通过软件编号 查询该软件部署在那些机器上，返回这些机器的集合
+     *
+     * @param type 1 : elb
+     *             2 : esip
+     *             3 : list1
+     *             4 : list2 (7台服务器)
+     */
+    public static List<String> getIp(int type) throws Exception {
+        String key = "";
+        if (type == 1) key = "elb";
+        if (type == 2) key = "esip";
+        if (type == 3) key = "list1";
+        if (type == 4) key = "list2";
+        JSONObject jsonObject = JSONObject.parseObject(parseData());
+        Set<String> keys = jsonObject.keySet();
+        List<String> result = new ArrayList<>();
+        for (String item : keys) {
+            JSONObject list = (JSONObject) jsonObject.get(item);
+            JSONArray jsonArray = (JSONArray) list.get(key);
+            jsonArray.forEach(i -> result.add((String) i));
+        }
+        return result;
+    }
+
+    /**
+     * 读取这个文件的内容 装换成字符串，用于读取日志文件
+     * @param file
+     * @return
+     */
+    public static String readFileToString(File file) {
         final String CHARSET_NAME = "UTF-8";
-        List<String> content = new ArrayList<>();
         StringBuilder datas = new StringBuilder();
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(Files.newInputStream(fileName.toPath()), CHARSET_NAME))) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(Files.newInputStream(file.toPath()), CHARSET_NAME))) {
             String line;
             while ((line = br.readLine()) != null) {
-                content.add(line);
+                datas.append(line).append("\n");
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        for (String s : content) {
-            datas.append(s);
         }
         return datas.toString();
     }
@@ -69,5 +100,45 @@ public class NetwokELement {
         return file1.getName();
     }
 
+
+    /**
+     * 遍历一个文件夹下的所有文件,解析出文件的名称
+     *
+     * @param filePath
+     */
+    public static Map<String, List<File>> foreachFiles(String filePath) {
+        File file = new File(filePath);
+        Map<String, List<File>> fileList = new Hashtable<>();
+        if (!file.isDirectory() || !file.exists()) {
+            return fileList;
+        }
+        File[] files = file.listFiles();
+        if (files != null) {
+            for (File file1 : files) {
+                String name = file1.getName();
+                String ip = name.substring(name.indexOf("(") + 1, name.indexOf(")"));
+                List<File> datas = fileList.get(ip);
+                //map里面没有这个key 则新生成一个数据写入map
+                if (datas == null || datas.size() == 0) {
+                    List<File> fs = new ArrayList<>();
+                    fs.add(file1);
+                    fileList.put(ip, fs);
+                } else {
+                    datas.add(file1);
+                    fileList.put(ip, datas);
+                }
+            }
+        }
+        return fileList;
+    }
+
+
+    /**
+     * 脚本名称
+     * @param shellName
+     */
+    public static void shell(String shellName) throws Exception{
+        Runtime.getRuntime().exec( "bash " + " " + shellName);
+    }
 
 }

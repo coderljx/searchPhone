@@ -5,11 +5,11 @@
 # 需要进行过滤的关键字
 tips=(error Failed)
 #tips=(2 Failed)
-# 日志文件的前缀
-dir=/imsfz/esip/log
+# 日志文件的前缀以及存放路径
+dir=/imsfz/elb/log
 log=(sys_dbgprint_ sys_desk_)
 #esip的回传路径,该路径是51.192上的路径
-uploadPath=/watch/log/esipLog
+uploadPath=/watch/log/elbLog
 
 str=''
 for i in "${tips[@]}" ; do
