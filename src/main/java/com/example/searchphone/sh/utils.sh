@@ -39,7 +39,7 @@ function sortFilelist() {
 
 #回传方法，将生成的文件进行回传到51.192  方便查看
 function reUpload() {
-#  防止后续传递不上来
+  #  防止后续传递不上来
   ssh -o StrictHostKeyChecking=no $ip
   sshpass -p $psd scp -r $1 $user@$ip:$2
 }

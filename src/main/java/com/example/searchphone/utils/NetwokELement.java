@@ -8,12 +8,16 @@ import org.apache.tomcat.util.json.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -25,8 +29,11 @@ public class NetwokELement {
 
     // 读取每个网元的配置信息
     public static String parseData() throws Exception {
-        File file = ResourceUtils.getFile("classpath:NetworkElement.txt");
-        return readFileToString(file);
+//        File file = ResourceUtils.getFile("/watch/backend/NetworkElement.txt");
+//        InputStream resource = NetwokELement.class.getResourceAsStream("static/NetworkElement.txt");
+        String networkElement = "C:\\Users\\Brother\\Desktop\\searchPhone\\searchPhone\\src\\main\\resources\\static\\NetworkElement.txt";
+//        String networkElement = "/watch/backend/NetworkElement.txt";
+        return readFileToString(new File(networkElement));
     }
 
     /**
@@ -55,7 +62,31 @@ public class NetwokELement {
     }
 
     /**
+     * 直接通过json的key获取对应的服务器数组
+     *
+     * @param type
+     * @return
+     * @throws Exception
+     */
+    public static List<String> getIp(String type) throws Exception {
+        if (type.equals("mif") || type.equals("scmd")) type = "list1";
+        if (type.equals("vmsip")) type = "list2";
+        if (type.equals("rtds") || type.equals("isftp")) type = "ivps";
+        JSONObject jsonObject = JSONObject.parseObject(parseData());
+        Set<String> keys = jsonObject.keySet();
+        List<String> result = new ArrayList<>();
+        for (String item : keys) {
+            JSONObject list = (JSONObject) jsonObject.get(item);
+            JSONArray jsonArray = (JSONArray) list.get(type);
+            jsonArray.forEach(i -> result.add((String) i));
+        }
+        return result;
+    }
+
+
+    /**
      * 读取这个文件的内容 装换成字符串，用于读取日志文件
+     *
      * @param file
      * @return
      */
@@ -135,10 +166,60 @@ public class NetwokELement {
 
     /**
      * 脚本名称
+     *
      * @param shellName
      */
-    public static void shell(String shellName) throws Exception{
-        Runtime.getRuntime().exec( "bash " + " " + shellName);
+    public static void shell(String shellName) throws Exception {
+        Runtime.getRuntime().exec("bash " + " " + shellName);
     }
+
+
+    /**
+     * 遍历这个文件夹，找到该文件夹下 ip与传入ip匹配的文件
+     *
+     * @param ip
+     * @param filePath
+     */
+    public static List<FileContent> forEachFile(List<String> ip, String filePath) throws Exception {
+        List<FileContent> resultList = new ArrayList<>();
+        File files = new File(filePath);
+        File[] files1 = files.listFiles();
+        if (files1 != null) {
+            for (File file : files1) {
+                for (String i : ip) {
+                    if (file.getName().contains("(" + i.substring(11) + ")")) {
+                        FileContent fileContent = new FileContent();
+                        fileContent.setIp(i);
+                        fileContent.setName(file.getName());
+                        fileContent.setDate(TimeUtil.ParseDate(new Date(file.lastModified()), 1));
+                        fileContent.setData(formatSize(file.length())); // 文件的大小
+                        resultList.add(fileContent);
+                    }
+                }
+            }
+        }
+        return resultList;
+    }
+
+
+    public static String formatSize(long fileS) {
+        DecimalFormat df = new DecimalFormat("#.00");
+        String fileSizeString = "";
+        String wrongSize = "0B";
+        if (fileS == 0) {
+            return wrongSize;
+        }
+        if (fileS < 1024) {
+            fileSizeString = df.format((double) fileS) + "B";
+        } else if (fileS < 1048576) {
+            fileSizeString = df.format((double) fileS / 1024) + "KB";
+        } else if (fileS < 1073741824) {
+            fileSizeString = df.format((double) fileS / 1048576) + "MB";
+        } else {
+            fileSizeString = df.format((double) fileS / 1073741824) + "GB";
+        }
+        return fileSizeString;
+    }
+
 
 }

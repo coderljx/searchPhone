@@ -101,7 +101,7 @@ public class TimeUtil {
      */
     public static String agoThreeTime(int days) {
         Calendar instance = Calendar.getInstance();
-        instance.add(Calendar.DAY_OF_MONTH,-3);
+        instance.add(Calendar.DAY_OF_MONTH,days);
 
         return ParseDate(instance.getTime()).substring(0,11);
     }
