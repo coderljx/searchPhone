@@ -22,6 +22,7 @@ public class SearchPhoneApplication {
 
     @Value("${esipShell.path}")
     private String esipShellPath;
+    private String koko;
 
     /**
      * 定时执行任务，调用脚本获取不同服务器上的日志文件
