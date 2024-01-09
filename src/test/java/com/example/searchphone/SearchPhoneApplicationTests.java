@@ -34,6 +34,8 @@ class SearchPhoneApplicationTests {
 //        Process exec = Runtime.getRuntime().exec("sshpass -p  bash /Users/brother/Desktop/searchPhone/src/main/java/com/example/searchphone/sh/esip.sh");
 //        Connection connection = new Connection("");
 
+        String agoThreeTime = TimeUtil.agoThreeTime(-1);
+        System.out.println(agoThreeTime);
     }
 
 

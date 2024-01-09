@@ -49,6 +49,11 @@ function getCurrent() {
   echo $current_time
 }
 
+function getCurrentTime() {
+  times=$(date "+%Y-%m-%d")
+  echo $times
+}
+
 #活动当前服务器的ip地址
 function getCurrentIp() {
   ips=($(cat "$IPS_FILE"))
