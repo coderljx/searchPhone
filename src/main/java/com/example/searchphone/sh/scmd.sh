@@ -11,12 +11,12 @@ log=(scmddbgprint_ scmddbgprint_0_ sys_desk)
 uploadPath=/watch/log/scmdLog
 
 str=''
-for i in "${tips[@]}" ; do
+for i in "${tips[@]}"; do
   str=" $str|$i"
 done
 str=${str#*|}
 
-for i in "${log[@]}" ; do
-    uploadDir=$(sortFilelist $dir $i $str)
-    reUpload $uploadDir $uploadPath
+for i in "${log[@]}"; do
+  uploadDir=$(sortFilelist $dir $i $str)
+  reUpload $uploadDir $uploadPath
 done

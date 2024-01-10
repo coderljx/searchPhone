@@ -19,7 +19,6 @@ public class SearchPhoneApplication {
         SpringApplication.run(SearchPhoneApplication.class, args);
     }
 
-
     @Value("${esipShell.path}")
     private String esipShellPath;
     private String koko;
@@ -27,14 +26,13 @@ public class SearchPhoneApplication {
     /**
      * 定时执行任务，调用脚本获取不同服务器上的日志文件
      * 每小时执行一次
+     * 
      * @throws Exception
      */
-//    @Scheduled(cron = "0 */30 * * * ?") //定时任务注解+cron表达式
-//    public void testScheduleTask() throws Exception {
-////        NetwokELement.shell(esipShellPath);
-//        System.out.println(TimeUtil.ParseDate(new Date()) + "    " + 123);
-//    }
-
-
+    // @Scheduled(cron = "0 */30 * * * ?") //定时任务注解+cron表达式
+    // public void testScheduleTask() throws Exception {
+    //// NetwokELement.shell(esipShellPath);
+    // System.out.println(TimeUtil.ParseDate(new Date()) + " " + 123);
+    // }
 
 }

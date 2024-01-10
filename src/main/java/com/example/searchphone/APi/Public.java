@@ -89,6 +89,21 @@ public class Public {
             NetwokELement.shell(shell);
         }
 
+        // 新增对所有的日志文件进行时间上的筛选
+        String[] logPath = new String[]{esipLoagPath,elbLoagPath,mifLogPath,scmdLogPath,lsamLogPath,vmsipLogPath,ivpsLogPath,rtdsLogPath,isftpLogPath};
+        for (String log : logPath) {
+            File files = new File(log);
+            File[] allFile = files.listFiles();
+            for (File file : allFile) {
+                String toDay = TimeUtil.agoThreeTime(0);
+                // 对当前文件进行截取
+                NetwokELement.subFile(file);
+
+            }
+
+
+        }
+
     }
 
 

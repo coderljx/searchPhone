@@ -104,6 +104,44 @@ public class NetwokELement {
         return datas.toString();
     }
 
+    /**
+     * 对大文件进行截取，只取出一部分的内容
+     * @param file
+     * @return
+     */
+    public static void subFile(File file) {
+        final String CHARSET_NAME = "UTF-8";
+        StringBuilder datas = new StringBuilder();
+        long length = file.length();
+        int maxLength = 1048576 * 3;
+        // 判断该文件是否大于限制的文件大小
+        boolean fileSub = false;
+        if (length > maxLength) fileSub = true;
+
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(Files.newInputStream(file.toPath()), CHARSET_NAME))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                // 如果这个文件本身大小超过了限制，并且读取的内容也超过了，那么我们就截取
+                if (datas.length() > 5000 && fileSub) {
+                    datas.delete(0,datas.length());
+                }
+                // 清除之前的读取内容，然后我们再继续读取后面的内容
+                datas.append(line).append("\n");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (fileSub) {
+            // 对原来的文件进行覆盖，只保留最后的一部分
+            try {
+                FileOutputStream fileOutputStream = new FileOutputStream(file);
+                fileOutputStream.write(datas.toString().getBytes("UTF-8"));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
 
     /**
      * 对一个目录下的文件进行排序，拿到最新的文件
@@ -209,12 +247,16 @@ public class NetwokELement {
         if (fileS == 0) {
             return wrongSize;
         }
+        // 1b
         if (fileS < 1024) {
             fileSizeString = df.format((double) fileS) + "B";
+            // 1m
         } else if (fileS < 1048576) {
             fileSizeString = df.format((double) fileS / 1024) + "KB";
+            // 1g
         } else if (fileS < 1073741824) {
             fileSizeString = df.format((double) fileS / 1048576) + "MB";
+            // 1t
         } else {
             fileSizeString = df.format((double) fileS / 1073741824) + "GB";
         }

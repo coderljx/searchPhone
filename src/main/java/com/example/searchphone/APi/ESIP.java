@@ -41,7 +41,7 @@ public class ESIP {
 
         List<File> files = stringListMap.get(ip);
         List<FileContent> fileResult = new ArrayList<>();
-        if (files != null && files.size() > 0) {
+        if (files != null && !files.isEmpty()) {
             for (File file : files) {
                 FileContent fileContent = FileContent.parseFile(file, ip);
                 fileResult.add(fileContent);

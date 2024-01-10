@@ -31,8 +31,13 @@ class SearchPhoneApplicationTests {
 
 
     public static void main(String[] args) throws Exception {
-//        Process exec = Runtime.getRuntime().exec("sshpass -p  bash /Users/brother/Desktop/searchPhone/src/main/java/com/example/searchphone/sh/esip.sh");
-//        Connection connection = new Connection("");
+
+        File file = new File("D:\\资料\\1.txt");
+        FileOutputStream fileOutputStream = new FileOutputStream(file);
+        StringBuilder datas = new StringBuilder("asdasdas\n" +
+                "asdasda\n" +
+                "dasdasdasd");
+        fileOutputStream.write(datas.toString().getBytes("UTF-8"));
 
         String agoThreeTime = TimeUtil.agoThreeTime(-1);
         System.out.println(agoThreeTime);
